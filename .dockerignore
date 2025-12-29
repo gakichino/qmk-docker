@@ -1,0 +1,25 @@
+# Git関連
+.git
+.gitignore
+.gitattributes
+
+# ビルド成果物
+*.hex
+*.bin
+*.uf2
+*.dfu
+
+# 一時ファイル
+*.tmp
+*.log
+.DS_Store
+
+# IDE関連
+.vscode
+.idea
+*.swp
+*.swo
+
+# ドキュメント（必要に応じて）
+# README.md
+

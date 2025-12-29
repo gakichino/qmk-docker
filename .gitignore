@@ -1,0 +1,24 @@
+# QMK firmwareリポジトリ
+qmk_firmware/
+
+# ビルド成果物
+firmware/
+*.hex
+*.bin
+*.uf2
+*.dfu
+
+# 一時ファイル
+*.tmp
+*.log
+.DS_Store
+
+# IDE関連
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker関連
+.docker/
+
