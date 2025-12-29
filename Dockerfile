@@ -7,8 +7,10 @@ FROM qmkfm/qmk_cli:latest
 # 例: エディタのインストールなど
 # RUN apt-get update && apt-get install -y vim nano
 
+COPY setup.sh ./setup.sh
+RUN chmod +x setup.sh
 
 
 # デフォルトコマンド
-CMD ["/bin/bash", "-c", "/root/opt/setup.sh; tail -f /dev/null"]
+CMD ["/bin/bash", "-c", "./setup.sh; tail -f /dev/null"]
 

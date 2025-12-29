@@ -12,7 +12,7 @@ services:
       - ./qmk_firmware:/qmk_firmware
     stdin_open: true
     tty: true
-    command: /bin/bash -c "./setup.sh; tail -f /dev/null"
+    # command: /bin/bash -c "./setup.sh; tail -f /dev/null"
     environment:
       - QMK_HOME=/qmk_firmware
 

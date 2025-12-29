@@ -12,14 +12,19 @@ Dockerコンテナ上でQMK firmwareを動かして自作キーボードのマ�
 ### 自動セットアップスクリプトを実行
 
 ```bash
-./setup.sh
+docker compose up -d
+docker compose tail -f qmk
 ```
+
 
 このスクリプトは以下を自動で実行します：
 - QMK firmwareリポジトリのクローン
 - firmwareディレクトリの作成
 - Dockerコンテナの起動
 - QMKの初期セットアップ
+- ログの確認
+   - QMK is ready to goになったらOK
+   - Ctrl + C でログの確認を終了
 
 ### キーマッピングの作成・編集
 
