@@ -9,6 +9,12 @@ Dockerコンテナ上でQMK firmwareを動かして自作キーボードのマ�
 
 ## セットアップ
 
+### カスタムしたいキーボードの値に書き換え
+`setup.sh`の
+{自作キーボードのリポジトリのURL}
+{自作キーボードのリポジトリ内のキーボード定義のパス}
+を更新
+
 ### 自動セットアップスクリプトを実行
 
 ```bash
@@ -43,7 +49,7 @@ qmk new-keymap -kb <keyboard_name> -km <keymap_name>
 
 ### ファームウェアのビルド
 
-#### ヘルパースクリプトを使用（推奨）
+#### ヘルパースクリプトを使用
 
 ```bash
 # ホストから直接ビルド
@@ -56,10 +62,10 @@ qmk new-keymap -kb <keyboard_name> -km <keymap_name>
 ビルドが成功すると、`firmware/` ディレクトリに `.hex` ファイルが生成されます。
 
 ### ファームウェアの書き込み
-
-
-#### ヘルパースクリプトを使用（推奨）
-
+QMK Toolboxを使用して書き込み
+1. QMK Toolboxでhexファイルを開く
+2. QMK ToolboxでAuto Flashにチェックを入れる
+3. キーボードのリセットボタンを素早く2回押すとブートローダーモードになり、書き込みが始まる
 
 ### よく使うコマンド （コンテナ内で実行）
 
@@ -81,11 +87,6 @@ qmk lint -kb <keyboard_name> -km <keymap_name>
 
 ```
 qmk-docker/
-├── docker-compose.yml      # Docker Compose設定
-├── Dockerfile              # カスタムDockerfile（オプション）
-├── .dockerignore           # Dockerビルド時の除外ファイル
-├── .gitignore              # Git除外設定
-├── README.md               # このファイル
 ├── setup.sh                # 自動セットアップスクリプト
 ├── qmk-build.sh            # ビルド用ヘルパースクリプト
 ├── qmk_firmware/           # QMK firmwareリポジトリ（クローンしたもの）
@@ -109,10 +110,10 @@ docker compose ps
 
 ```bash
 # QMKのセットアップを再実行
-qmk setup
+docker compose exec qmk qmk setup
 
 # 依存関係を更新
-qmk doctor
+docker compose exec qmk qmk doctor
 ```
 
 ## 参考リンク
