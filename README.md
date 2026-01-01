@@ -36,7 +36,7 @@ docker compose tail -f qmk
 
 1. キーマップファイルを編集します。例：
 
-```bash
+```
 # キーマップファイルの場所
 qmk_firmware/keyboards/<keyboard_name>/keymaps/<keymap_name>/keymap.c
 ```
@@ -89,8 +89,8 @@ qmk lint -kb <keyboard_name> -km <keymap_name>
 qmk-docker/
 ├── setup.sh                # 自動セットアップスクリプト
 ├── qmk-build.sh            # ビルド用ヘルパースクリプト
-├── qmk_firmware/           # QMK firmwareリポジトリ（クローンしたもの）
-├── custom_keyboard/        # QMK firmwareリポジトリ（クローンしたもの）
+├── qmk_firmware/           # QMK firmwareリポジトリ（クローンしたものが入る）
+├── custom_keyboard/        # 自作キーボードリポジトリ（クローンしたものが入る）
 └── firmware/               # ビルド済みファームウェアの出力先
 ```
 

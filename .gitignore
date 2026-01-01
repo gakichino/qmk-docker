@@ -1,9 +1,6 @@
 # QMK firmwareリポジトリ
 qmk_firmware/
 
-# ビルド成果物
-firmware/
-*.hex
 *.bin
 *.uf2
 *.dfu
