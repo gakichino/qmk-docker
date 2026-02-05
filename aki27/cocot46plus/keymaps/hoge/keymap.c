@@ -18,18 +18,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #include "quantum.h"
+#include "naginata.h"
+NGKEYS naginata_keys;
 
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_number {
-    _BASE = 0,
+    _QWERTY = 0,
     _LOWER = 1,
     _RAISE = 2,
     _TRACKBALL = 3,
-    _Layer4 = 4,
-    _Layer5 = 5,
-    _Layer6 = 6
+    _NAGINATA = 4,
+    _SCROLL = 5,
+    _Layer6 = 6,
 };
+
+enum custom_keycodes {
+    EISU = NG_SAFE_RANGE,
+    KANA2,
+    LCTLTOG, // Macのライブ変換をオン/オフする
+};
+
+void matrix_init_user(void) {
+    // 薙刀式
+    uint16_t ngonkeys[] = {KC_H, KC_J};
+    uint16_t ngoffkeys[] = {KC_F, KC_G};
+    set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
+    // 薙刀式
+}
 
 
 #define LW_MHEN LT(1,KC_INT5)  // lower
@@ -47,76 +63,75 @@ enum layer_number {
 */
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_BASE] = LAYOUT(
+  [_QWERTY] = LAYOUT(
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                          KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
+       LGUI_T(KC_TAB),    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                          KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSLS,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                                          KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
+      LCTL_T(KC_ESC),    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                                          KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                          KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_MINS,
+      LALT_T(KC_LNG1),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                          KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, RALT_T(KC_LNG2),
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        KC_LGUI, DEL_ALT,   LW_MHEN,  KC_SPC, MS_BTN1,             MS_BTN2,  KC_ENT, RS_HENK, KC_BSPC,  KC_ESC,
-                                                                 KC_PGUP, MS_BTN3,    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
+                        LCTL(KC_UP), MO(4),   LSFT_T(KC_SPC),  MO(5), MS_BTN1,             MS_BTN2,  RGUI_T(KC_BSPC), RSFT_T(KC_ENT), KC_RGUI,  LCTL(KC_DOWN),
+                                                                 KC_PGUP, DF(4),    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
   [_LOWER] = LAYOUT(
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-       KC_ESC, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                                       KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
+       LGUI_T(KC_TAB),    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                          KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSLS,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       KC_LCBR, KC_RCBR, KC_LBRC, KC_RBRC, KC_COLN, KC_DQUO,
+      LCTL_T(KC_ESC),    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                                          KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_LSFT,  KC_GRV, KC_TILD, KC_NUBS, KC_PIPE, XXXXXXX,                                        KC_EQL, KC_PLUS, KC_LABK, KC_RABK, KC_QUES, KC_UNDS,
+      LALT_T(KC_LNG1),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                          KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, RALT_T(KC_LNG2),
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        KC_LGUI, DEL_ALT, KC_TRNS,  KC_SPC,   MS_BTN4,             MS_BTN5,  KC_ENT,   TT(3), KC_BSPC,  KC_ESC,
-                                                                 KC_PGUP, MS_BTN3,    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
+                        LGUI(KC_TAB), MO(4),   LSFT_T(KC_SPC),  MO(6), MS_BTN1,             MS_BTN2,  RCTL_T(KC_BSPC), RSFT_T(KC_ENT), KC_RGUI,  LCTL(LALT(KC_TAB)),
+                                                                 KC_PGUP, DF(0),    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
   [_RAISE] = LAYOUT(
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-       KC_ESC,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                          KC_6,    KC_7,    KC_8,    KC_9,   KC_0,  KC_BSPC,
+       LALT(LGUI(KC_KB_POWER)),    KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,                                          KC_F6,    KC_F7,    KC_F8,    KC_F9,   KC_F10,  KC_NO,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_LCTL,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                        KC_APP,   KC_UP,S(KC_INT1), KC_UNDS, KC_DQUO, KC_COLN,
+      KC_TRNS,   KC_F11,   KC_F12,   KC_NO,   LGUI(LSFT(KC_4)),  LGUI(LSFT(KC_3)),                                        KC_LEFT,   KC_DOWN, KC_UP, KC_RIGHT, KC_NO, KC_NO,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_LSFT,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,                                       KC_LEFT, KC_DOWN, KC_RGHT,  KC_DOT, KC_SLSH, KC_MINS,
+      KC_TRNS,   UG_NEXT, UG_TOGG, RGB_M_SN,   KC_NO,  LGUI(LCTL(KC_SPC)),                                       KC_MPLY, KC_MSTP, KC_NO,  KC_NO, KC_NO, KC_TRNS,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        KC_LGUI, DEL_ALT,   TT(3),  KC_SPC,   MS_BTN4,             MS_BTN5,  KC_ENT, KC_TRNS, KC_BSPC,  KC_ESC,
-                                                                 KC_PGUP, MS_BTN3,    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
+                        KC_TRNS, KC_TRNS,   KC_NO,  KC_NO,   LGUI(KC_LEFT),             LGUI(KC_RIGHT),  RGUI_T(KC_DEL), KC_TRNS, KC_TRNS,  KC_NO,
+                                                                 LGUI(KC_MINS), MS_BTN3,    LGUI(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
   [_TRACKBALL] = LAYOUT(
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, UG_TOGG,                                       SCRL_TO,  CPI_SW, SCRL_SW, ROT_L15, ROT_R15, XXXXXXX,
+       LGUI(KC_L),    KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,                                          KC_F6,    KC_F7,    KC_F8,    KC_F9,   KC_F10,  KC_NO,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, UG_VALU, UG_SATU, UG_HUEU, UG_NEXT,                                       SCRL_MO, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      KC_TRNS,   KC_F11,   KC_F12,   KC_NO,   LGUI(LSFT(KC_S)),  LGUI(KC_PSCR),                                        KC_LEFT,   KC_DOWN, KC_UP, KC_RIGHT, KC_NO, KC_NO,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, UG_VALD, UG_SATD, UG_HUED, UG_PREV,                                       SCRL_IN, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      KC_TRNS,   UG_NEXT, UG_TOGG, RGB_M_SN,   KC_NO,  LGUI(KC_DOT),                                       KC_MPLY, KC_MSTP, KC_NO,  KC_NO, KC_NO, KC_TRNS,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        KC_LGUI, DEL_ALT, KC_TRNS,  KC_SPC,   MS_BTN1,             MS_BTN2,  KC_ENT, RS_HENK, KC_BSPC,  KC_ESC,
-                                                                 KC_PGUP, MS_BTN3,    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
+                        KC_TRNS, KC_TRNS,   KC_NO,  KC_NO,   KC_WBAK,             KC_WFWD,  RCTL_T(KC_DEL), KC_TRNS, KC_TRNS,  KC_NO,
+                                                                 LCTL(KC_MINS), DF(0),    LCTL(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
-  [_Layer4] = LAYOUT(
+  [_NAGINATA] = LAYOUT(
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      LGUI_T(KC_TAB),    KC_I,    KC_W,    NG_E,    NG_R,    NG_T,                                          NG_Y,    NG_U,    NG_I,    NG_O,   NG_P,  XXXXXXX,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      LCTL_T(KC_ESC),    NG_A,    NG_S,    NG_D,    NG_F,    NG_G,                                          NG_H,    NG_J,    NG_K,    NG_L, NG_SCLN, XXXXXXX,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      LALT_T(KC_LNG1),    NG_Z,    NG_X,    NG_C,    NG_V,    NG_B,                                          NG_N,    NG_M, NG_COMM,  NG_DOT, NG_SLSH, RALT_T(KC_LNG2),
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,   XXXXXXX,             XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,
-                                                                 XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-                                                            //`--------------'  `--------------'
+                        LCTL(KC_UP), MO(4),   LSFT_T(KC_SPC),  MO(5), MS_BTN1,             MS_BTN2,  RGUI_T(KC_BSPC), RSFT_T(KC_ENT), KC_RGUI,  LCTL(KC_DOWN),
+                                                                 LCTL(KC_MINS), DF(0),    LCTL(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
     ),
-  [_Layer5] = LAYOUT(
+  [_SCROLL] = LAYOUT(
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       KC_NO,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                          KC_6,    KC_7,    KC_8,    KC_9,   KC_0,  KC_GRV,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       KC_TRNS,    LSFT(KC_1),    LSFT(KC_2),    LSFT(KC_3),    LSFT(KC_4),    LSFT(KC_5),                                          LSFT(KC_6),    LSFT(KC_7),    LSFT(KC_8),    LSFT(KC_9),   LSFT(KC_0),  LSFT(KC_GRV),
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      KC_TRNS, LSFT(KC_MINS), LSFT(KC_EQL), KC_MINS, KC_EQL, XXXXXXX,                                       KC_LBRC, KC_RBRC, LSFT(KC_LBRC), LSFT(KC_RBRC), LSFT(KC_SLSH), KC_TRNS,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,   XXXXXXX,             XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,
-                                                                 XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+                        XXXXXXX, KC_TRNS, XXXXXXX,  XXXXXXX,   MS_BTN1,             MS_BTN2,  KC_TRNS, KC_TRNS, KC_TRNS,  XXXXXXX,
+                                                                 KC_VOLD, DF(0),  KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
   [_Layer6] = LAYOUT(
@@ -135,43 +150,70 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [_BASE]      = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
+    [_QWERTY]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_LOWER]     = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_RAISE]     = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_TRACKBALL] = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
-    [_Layer4]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
-    [_Layer5]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
+    [_NAGINATA]  = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
+    [_SCROLL]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_Layer6]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
 };
 #endif
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+      case EISU:
+        if (record->event.pressed) {
+          // 薙刀式
+          naginata_off();
+          // 薙刀式
+        }
+        return false;
+        break;
+      case KANA2:
+        if (record->event.pressed) {
+          // 薙刀式
+          naginata_on();
+          // 薙刀式
+        }
+        return false;
+        break;
+    }
+  
+    // 薙刀式
+    if (!process_naginata(keycode, record))
+        return false;
+    // 薙刀式
+  
+    return true;
+  }
 
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _LOWER:
-        rgblight_sethsv_range(HSV_BLUE, 0, 2);
+        rgblight_sethsv_range(0, 0, 0, 0, 2);
         cocot_set_scroll_mode(false);
         break;
     case _RAISE:
         rgblight_sethsv_range(HSV_RED, 0, 2);
-        cocot_set_scroll_mode(true);
+        cocot_set_scroll_mode(false);
         break;
     case _TRACKBALL:
         rgblight_sethsv_range(HSV_GREEN, 0, 2);
-        cocot_set_scroll_mode(true);
+        cocot_set_scroll_mode(false);
         break;
-    case _Layer4:
+    case _NAGINATA:
         rgblight_sethsv_range(HSV_YELLOW, 0, 2);
         cocot_set_scroll_mode(false);
         break;
-    case _Layer5:
+    case _SCROLL:
         rgblight_sethsv_range(HSV_CYAN, 0, 2);
-        cocot_set_scroll_mode(false);
+        cocot_set_scroll_mode(true);
         break;
     case _Layer6:
         rgblight_sethsv_range(HSV_ORANGE, 0, 2);
-        cocot_set_scroll_mode(false);
+        cocot_set_scroll_mode(true);
         break;
     default:
         rgblight_sethsv_range( 0, 0, 0, 0, 2);
