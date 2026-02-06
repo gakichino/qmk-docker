@@ -43,4 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define NAGINATA_EDIT_LINUX
 // #define UNICODE_SELECTED_MODES UC_LNX
 
+// 初回起動時後置シフトをデフォルト有効にする
+// 初回起動以降切り替える場合は、NG_KOTIを押して切り替える
 #define NAGINATA_KOUCHI_SHIFT // シフトを後置でも有効にする
