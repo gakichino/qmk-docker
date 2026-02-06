@@ -19,3 +19,14 @@ qmk_firmware/
 # Docker関連
 .docker/
 
+aki27/cocot36plus
+aki27/cocot46
+aki27/cocot47
+aki27/coron36
+aki27/coron47
+aki27/cocot51
+aki27/cocot46plus/keymaps/rp2040
+aki27/coma16
+aki27/coron42
+aki27/coron47plus
+aki27/trackball_module
