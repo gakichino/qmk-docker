@@ -41,8 +41,8 @@ enum custom_keycodes {
 
 void matrix_init_user(void) {
     // 薙刀式
-    uint16_t ngonkeys[] = {KC_H, KC_J};
-    uint16_t ngoffkeys[] = {KC_F, KC_G};
+    uint16_t ngonkeys[] = {KC_N, KC_M};   // 薙刀オン（N+M）
+    uint16_t ngoffkeys[] = {KC_V, KC_B};  // 薙刀オフ（V+B）
     set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
     // 薙刀式
 }
@@ -71,7 +71,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
       LALT_T(KC_LNG1),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                          KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, RALT_T(KC_LNG2),
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        LCTL(KC_UP), MO(3),   LSFT_T(KC_SPC),  MO(5), MS_BTN1,             MS_BTN2,  RGUI_T(KC_BSPC), RSFT_T(KC_ENT), KC_RGUI,  LCTL(KC_DOWN),
+                        LCTL(KC_UP), KC_LSFT,   LT(3, KC_SPC),  MO(5), MS_BTN1,             MS_BTN2,  RGUI_T(KC_BSPC), RGUI_T(KC_ENT), KC_RSFT,  LCTL(KC_DOWN),
                                                                  KC_PGUP, DF(1),    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
@@ -83,8 +83,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
       LALT_T(KC_LNG1),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                          KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, RALT_T(KC_LNG2),
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        LGUI(KC_TAB), MO(3),   LSFT_T(KC_SPC),  MO(6), MS_BTN1,             MS_BTN2,  RCTL_T(KC_BSPC), RSFT_T(KC_ENT), KC_RGUI,  LCTL(LALT(KC_TAB)),
+                        LGUI(KC_TAB), KC_LSFT,   LT(3, KC_SPC),  MO(6), MS_BTN1,             MS_BTN2,  RCTL_T(KC_BSPC), RGUI_T(KC_ENT), KC_RSFT,  LCTL(LALT(KC_TAB)),
                                                                  KC_PGUP, DF(0),    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
+                                                            //`--------------'  `--------------'
+    ),
+  [_NAGINATA] = LAYOUT(
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      LGUI_T(KC_TAB),    NG_Q,    NG_W,    NG_E,    NG_R,    NG_T,                                          NG_Y,    NG_U,    NG_I,    NG_O,   NG_P,  KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      LCTL_T(KC_ESC),    NG_A,    NG_S,    NG_D,    NG_F,    NG_G,                                          NG_H,    NG_J,    NG_K,    NG_L, NG_SCLN, KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      LALT_T(KC_LNG1),    NG_Z,    NG_X,    NG_C,    NG_V,    NG_B,                                          NG_N,    NG_M, NG_COMM,  NG_DOT, NG_SLSH, RALT_T(KC_LNG2),
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+                        NG_KOTI, MO(6),   NG_SHFT,  KC_TRNS, MS_BTN1,             MS_BTN2,  KC_TRNS, NG_SHFT2, KC_RGUI,  LCTL(KC_DOWN),
+                                                                 LCTL(KC_MINS), KC_TRNS,    LCTL(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
+    ),
+  [_NUMBERS] = LAYOUT( // numbers & symbols
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+       KC_NO,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                          KC_6,    KC_7,    KC_8,    KC_9,   KC_0,  KC_GRV,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+       KC_TRNS,    LSFT(KC_1),    LSFT(KC_2),    LSFT(KC_3),    LSFT(KC_4),    LSFT(KC_5),                                          LSFT(KC_6),    LSFT(KC_7),    LSFT(KC_8),    LSFT(KC_9),   LSFT(KC_0),  LSFT(KC_GRV),
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      KC_TRNS, LSFT(KC_MINS), LSFT(KC_EQL), KC_MINS, KC_EQL, XXXXXXX,                                       KC_LBRC, KC_RBRC, LSFT(KC_LBRC), LSFT(KC_RBRC), LSFT(KC_SLSH), KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+                 XXXXXXX, KC_TRNS, XXXXXXX,  XXXXXXX,   MS_BTN1,             MS_BTN2,  KC_TRNS, KC_TRNS, KC_TRNS,  XXXXXXX,
+                                                               KC_VOLD, DF(0),  KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX
+    ),
+                                                            //`--------------'  `--------------'
+  [_Layer4] = LAYOUT(
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+                        XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,   XXXXXXX,             XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,
+                                                                 XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
   [_RAISE] = LAYOUT( // mac function & scroll
@@ -93,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
       KC_TRNS,   KC_F11,   KC_F12,   KC_NO,   LGUI(LSFT(KC_4)),  LGUI(LSFT(KC_3)),                                        KC_LEFT,   KC_DOWN, KC_UP, KC_RIGHT, KC_NO, KC_NO,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_TRNS,   UG_NEXT, UG_TOGG, RGB_M_SN,   KC_NO,  LGUI(LCTL(KC_SPC)),                                       KC_MPLY, KC_MSTP, KC_NO,  KC_NO, KC_NO, KC_TRNS,
+      KC_TRNS,   UG_NEXT, UG_TOGG, RGB_M_SN,   KC_NO,  LGUI(LCTL(KC_SPC)),                                       KC_MPLY, KC_MSTP, KC_NO,  SCRL_SW, CPI_SW, KC_TRNS,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
                         KC_TRNS, KC_TRNS,   KC_NO,  KC_NO,   LGUI(KC_LEFT),             LGUI(KC_RIGHT),  RGUI_T(KC_DEL), KC_TRNS, KC_TRNS,  KC_NO,
                                                                  LGUI(KC_MINS), MS_BTN3,    LGUI(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
@@ -110,53 +145,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                         KC_TRNS, KC_TRNS,   KC_NO,  KC_NO,   KC_WBAK,             KC_WFWD,  RCTL_T(KC_DEL), KC_TRNS, KC_TRNS,  KC_NO,
                                                                  LCTL(KC_MINS), MS_BTN3,    LCTL(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
-    ),
-  [_NAGINATA] = LAYOUT(
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      LGUI_T(KC_TAB),    NG_Q,    NG_W,    NG_E,    NG_R,    NG_T,                                          NG_Y,    NG_U,    NG_I,    NG_O,   NG_P,  KC_TRNS,
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      LCTL_T(KC_ESC),    NG_A,    NG_S,    NG_D,    NG_F,    NG_G,                                          NG_H,    NG_J,    NG_K,    NG_L, NG_SCLN, KC_TRNS,
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      LALT_T(KC_LNG1),    NG_Z,    NG_X,    NG_C,    NG_V,    NG_B,                                          NG_N,    NG_M, NG_COMM,  NG_DOT, NG_SLSH, RALT_T(KC_LNG2),
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        KC_TRNS, MO(3),   LSFT_T(KC_SPC),  KC_TRNS, MS_BTN1,             MS_BTN2,  RGUI_T(KC_BSPC), RSFT_T(KC_ENT), KC_RGUI,  LCTL(KC_DOWN),
-                                                                 LCTL(KC_MINS), KC_TRNS,    LCTL(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
-    ),
-  [_NUMBERS] = LAYOUT( // numbers & symbols
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-       KC_NO,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                          KC_6,    KC_7,    KC_8,    KC_9,   KC_0,  KC_GRV,
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-       KC_TRNS,    LSFT(KC_1),    LSFT(KC_2),    LSFT(KC_3),    LSFT(KC_4),    LSFT(KC_5),                                          LSFT(KC_6),    LSFT(KC_7),    LSFT(KC_8),    LSFT(KC_9),   LSFT(KC_0),  LSFT(KC_GRV),
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_TRNS, LSFT(KC_MINS), LSFT(KC_EQL), KC_MINS, KC_EQL, XXXXXXX,                                       KC_LBRC, KC_RBRC, LSFT(KC_LBRC), LSFT(KC_RBRC), LSFT(KC_SLSH), KC_TRNS,
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        XXXXXXX, KC_TRNS, XXXXXXX,  XXXXXXX,   MS_BTN1,             MS_BTN2,  KC_TRNS, KC_TRNS, KC_TRNS,  XXXXXXX,
-                                                                 KC_VOLD, DF(0),  KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX
-                                                            //`--------------'  `--------------'
-    ),
-  [_Layer4] = LAYOUT(
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,   XXXXXXX,             XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,
-                                                                 XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-                                                            //`--------------'  `--------------'
     )
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_QWERTY]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
+    [_Layer4]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_LOWER]     = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_RAISE]     = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_TRACKBALL] = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_NAGINATA]  = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_NUMBERS]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
-    [_Layer4]    = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
 };
 #endif
 
