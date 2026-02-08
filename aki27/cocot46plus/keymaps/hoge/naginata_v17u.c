@@ -545,6 +545,35 @@ void compress_buffer(int n) {
   ng_chrcount -= n;
 }
 
+// キー集合のビット数（最長マッチ用）
+static int popcount32(uint32_t x) {
+  int c = 0;
+  while (x) {
+    c++;
+    x &= x - 1;
+  }
+  return c;
+}
+
+// key_mask で指定したビットに対応するキーをバッファから1つずつ削除する（シフトを特別扱いしない相互シフト用）
+static void remove_keys_from_buffer(uint32_t key_mask) {
+  while (key_mask != 0 && ng_chrcount > 0) {
+    bool removed = false;
+    for (int i = 0; i < ng_chrcount; i++) {
+      uint32_t b = ng_key[ninputs[i] - NG_Q];
+      if (b & key_mask) {
+        key_mask &= ~b;
+        for (int j = i; j + 1 < NGBUFFER; j++) ninputs[j] = ninputs[j + 1];
+        ninputs[NGBUFFER - 1] = 0;
+        ng_chrcount--;
+        removed = true;
+        break;
+      }
+    }
+    if (!removed) break;
+  }
+}
+
 void switchOS(uint8_t os) {
   naginata_config.os = os;
   eeconfig_update_user(naginata_config.raw);
@@ -875,6 +904,7 @@ bool process_naginata(uint16_t keycode, keyrecord_t *record) {
         break;
     }
   } else { // key release
+
     switch (keycode) {
       case NG_Q ... NG_SHFT2:
         // どれかキーを離したら処理を開始する
@@ -889,18 +919,75 @@ bool process_naginata(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-// キー入力を文字に変換して出力する
+// キー入力を文字に変換して出力する（シフトを特別扱いしない：バッファ|keycomb の和集合で最長マッチ）
 void naginata_type(void) {
-  // バッファの最初からnt文字目までを検索キーにする。
-  // 一致する組み合わせがなければntを減らして=最後の1文字を除いて再度検索する。
-  int nt = ng_chrcount;
+  naginata_keymap bngmap;
 
-  while (nt > 0) {
-    if (naginata_lookup(nt, true)) return; // 連続シフト有効で探す
-    if (naginata_lookup(nt, false)) return; // 連続シフト無効で探す
-    nt--; // 最後の1キーを除いて、もう一度仮名テーブルを検索する
+  while (ng_chrcount > 0) {
+    // バッファとまだ押しているキー(keycomb)の和集合
+    uint32_t full_comb = keycomb;
+    uint32_t buffer_bits = 0;
+    for (int i = 0; i < ng_chrcount; i++) {
+      uint32_t b = ng_key[ninputs[i] - NG_Q];
+      full_comb |= b;
+      buffer_bits |= b;
+    }
+
+    // 特殊: NG_SHFT2 単体でエンター
+    if (full_comb == B_SHFT && ng_chrcount >= 1 && ninputs[0] == NG_SHFT2) {
+      tap_code(KC_ENT);
+      remove_keys_from_buffer(B_SHFT);
+      return;
+    }
+    // 特殊: 薙刀オン/オフ
+    if (full_comb == (B_N | B_M)) {
+      naginata_on();
+      remove_keys_from_buffer(B_N | B_M);
+      return;
+    }
+    if (full_comb == (B_V | B_B)) {
+      naginata_off();
+      remove_keys_from_buffer(B_V | B_B);
+      return;
+    }
+
+    // テーブルから full_comb の部分集合で最長の仮名を探す（バッファに1キー以上含まれるものだけ＝removeで進むため）
+    // 同点なら「バッファ先頭の文字キー（Shift以外）」を含む方を優先（K→J の順で「もの」になるように）
+    uint32_t best_key = 0;
+    uint32_t first_char_bit = 0;  // バッファで先頭の非Shiftキーのビット
+    for (int i = 0; i < ng_chrcount; i++) {
+      uint16_t kc = ninputs[i];
+      if (kc < NG_SHFT || kc > NG_SHFT2) {
+        first_char_bit = ng_key[kc - NG_Q];
+        break;
+      }
+    }
+    for (int i = 0; i < (int)(sizeof ngmap / sizeof(naginata_keymap)); i++) {
+      memcpy_P(&bngmap, &ngmap[i], sizeof(bngmap));
+      if ((bngmap.key & full_comb) != bngmap.key || (buffer_bits & bngmap.key) == 0) continue;
+      int new_pop = popcount32(bngmap.key);
+      int best_pop = popcount32(best_key);
+      bool better = (new_pop > best_pop)
+          || (new_pop == best_pop && best_pop > 0 && first_char_bit != 0
+              && (bngmap.key & first_char_bit) != 0 && (best_key & first_char_bit) == 0);
+      if (better) best_key = bngmap.key;
+    }
+    if (best_key != 0) {
+      for (int i = 0; i < (int)(sizeof ngmap / sizeof(naginata_keymap)); i++) {
+        memcpy_P(&bngmap, &ngmap[i], sizeof(bngmap));
+        if (bngmap.key == best_key) {
+          send_string(bngmap.kana);
+          break;
+        }
+      }
+      remove_keys_from_buffer(best_key);
+      continue;
+    }
+
+    // マッチなし: 先頭1キーを消費
+    compress_buffer(1);
+    return;
   }
-  compress_buffer(1);
 }
 
 // バッファの頭からnt文字の範囲を検索キーにしてテーブル検索し、文字に変換して出力する
