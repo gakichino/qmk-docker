@@ -1,5 +1,5 @@
 # QMK firmwareリポジトリ
-qmk_firmware/
+# qmk_firmware/*
 
 *.bin
 *.uf2

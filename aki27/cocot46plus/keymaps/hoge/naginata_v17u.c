@@ -342,6 +342,14 @@ const PROGMEM naginata_keymap ngmap[] = {
   {.key = B_SHFT            , .kana = " "},
   {.key = B_Q               , .kana = ""},
   {.key = B_V|B_SHFT        , .kana = ","},
+  {.key = B_J|B_K|B_F        , .kana = ";"},
+  {.key = B_J|B_K|B_G       , .kana = ":"},
+  {.key = B_J|B_K|B_G       , .kana = ":"},
+  {.key = B_J|B_K|B_V       , .kana = "<"},
+  {.key = B_J|B_K|B_B       , .kana = ">"},
+  {.key = B_J|B_K|B_D       , .kana = "?"},
+  {.key = B_J|B_K|B_C       , .kana = "!"},
+  
   {.key = B_M|B_SHFT        , .kana = "."SS_TAP(X_ENTER)},
   {.key = B_U               , .kana = SS_TAP(X_BSPC)},
 
@@ -417,9 +425,9 @@ const PROGMEM naginata_keymap ngmap[] = {
   // {.key = B_C|B_V|B_SLSH		, .kana = SS_LCTL(SS_TAP(X_PGDN)SS_TAP(X_PGDN)SS_TAP(X_PGDN)SS_TAP(X_PGDN)SS_TAP(X_PGDN))}, // ^{PgDn 5}
 // };
 
-const PROGMEM naginata_keymap_long ngmapl_tate[] = {
-  {.key = B_T           , .kana = SS_TAP(NGLT)},
-  {.key = B_Y           , .kana = SS_TAP(NGRT)},
+// const PROGMEM naginata_keymap_long ngmapl_tate[] = {
+  // {.key = B_T           , .kana = SS_TAP(NGLT)},
+  // {.key = B_Y           , .kana = SS_TAP(NGRT)},
 // 編集モード 縦横
   // {.key = B_D|B_F|B_J		, .kana = SS_TAP(NGUP)}, // {↑}
   // {.key = B_D|B_F|B_K		, .kana = SS_LSFT(SS_TAP(NGUP))}, // +{↑}
@@ -431,9 +439,9 @@ const PROGMEM naginata_keymap_long ngmapl_tate[] = {
   // {.key = B_C|B_V|B_K		, .kana = SS_LSFT(SS_TAP(NGRT)SS_TAP(NGRT)SS_TAP(NGRT)SS_TAP(NGRT)SS_TAP(NGRT))}, // +{→ 5}
   // {.key = B_C|B_V|B_M		, .kana = SS_TAP(NGLT)SS_TAP(NGLT)SS_TAP(NGLT)SS_TAP(NGLT)SS_TAP(NGLT)}, // {← 5}
   // {.key = B_C|B_V|B_COMM		, .kana = SS_LSFT(SS_TAP(NGLT)SS_TAP(NGLT)SS_TAP(NGLT)SS_TAP(NGLT)SS_TAP(NGLT))}, // +{← 5}
-};
+// };
 
-static naginata_keymap_long ngmapl_ty[12];
+// static naginata_keymap_long ngmapl_ty[12];
 
 const PROGMEM naginata_keymap_long ngmapl_mac[] = {
 // 編集モード Mac
@@ -502,7 +510,7 @@ void set_naginata(uint8_t layer, uint16_t *onk, uint16_t *offk) {
     eeconfig_update_user(naginata_config.raw);
   }
   // ng_set_unicode_mode(naginata_config.os);
-  copyTYtable();
+  // copyTYtable();
 }
 
 // 薙刀式をオン
@@ -630,26 +638,26 @@ void tategaki_toggle() {
   naginata_config.tategaki ^= 1;
   eeconfig_update_user(naginata_config.raw);
 
-  copyTYtable();
+  // copyTYtable();
 }
 
-void copyTYtable() {
-  memcpy_P(&ngmapl_ty, &ngmapl_tate, sizeof(ngmapl_ty));
+// void copyTYtable() {
+//   memcpy_P(&ngmapl_ty, &ngmapl_tate, sizeof(ngmapl_ty));
 
-  for (int i = 0; i < sizeof(ngmapl_ty) / sizeof(ngmapl_ty[0]); i++) {
-    if (naginata_config.tategaki) {
-      replace(ngmapl_ty[i].kana, SS_TAP(NGUP), SS_TAP(X_UP));
-      replace(ngmapl_ty[i].kana, SS_TAP(NGDN), SS_TAP(X_DOWN));
-      replace(ngmapl_ty[i].kana, SS_TAP(NGLT), SS_TAP(X_LEFT));
-      replace(ngmapl_ty[i].kana, SS_TAP(NGRT), SS_TAP(X_RIGHT));
-    } else {
-      replace(ngmapl_ty[i].kana, SS_TAP(NGUP), SS_TAP(X_LEFT));
-      replace(ngmapl_ty[i].kana, SS_TAP(NGDN), SS_TAP(X_RIGHT));
-      replace(ngmapl_ty[i].kana, SS_TAP(NGLT), SS_TAP(X_DOWN));
-      replace(ngmapl_ty[i].kana, SS_TAP(NGRT), SS_TAP(X_UP));
-    }
-  }
-}
+//   for (int i = 0; i < sizeof(ngmapl_ty) / sizeof(ngmapl_ty[0]); i++) {
+//     if (naginata_config.tategaki) {
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGUP), SS_TAP(X_UP));
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGDN), SS_TAP(X_DOWN));
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGLT), SS_TAP(X_LEFT));
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGRT), SS_TAP(X_RIGHT));
+//     } else {
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGUP), SS_TAP(X_LEFT));
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGDN), SS_TAP(X_RIGHT));
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGLT), SS_TAP(X_DOWN));
+//       replace(ngmapl_ty[i].kana, SS_TAP(NGRT), SS_TAP(X_UP));
+//     }
+//   }
+// }
 
 void kouchi_shift_toggle() {
   naginata_config.kouchi_shift ^= 1;
