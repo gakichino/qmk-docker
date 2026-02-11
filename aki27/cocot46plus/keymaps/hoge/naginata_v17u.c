@@ -257,7 +257,7 @@ const PROGMEM naginata_keymap ngmap[] = {
   {.key = B_Q|B_N                  , .kana = "xo"      }, // ぉ
   {.key = B_Q|B_SHFT|B_N           , .kana = "xo"      }, // ぉ
   // {.key = B_Q|B_L                  , .kana = "xwa"     }, // ゎ
-  {.key = B_Q|B_SHFT|B_L           , .kana = "xwa"     }, // ゎ
+  {.key = B_Q|B_DOT                , .kana = "xwa"     }, // ゎ
   {.key = B_G                      , .kana = "xtu"     }, // っ
 
   // 清音拗音 濁音拗音 半濁拗音
@@ -327,12 +327,12 @@ const PROGMEM naginata_keymap ngmap[] = {
   {.key = B_V|B_H|B_K              , .kana = "kuxi"    }, // くぃ
   {.key = B_V|B_H|B_O              , .kana = "kuxe"    }, // くぇ
   {.key = B_V|B_H|B_N              , .kana = "kuxo"    }, // くぉ
-  {.key = B_V|B_H|B_L              , .kana = "kuxwa"   }, // くゎ
+  {.key = B_V|B_H|B_DOT            , .kana = "kuxwa"   }, // くゎ
   {.key = B_F|B_H|B_J              , .kana = "guxa"    }, // ぐぁ
   {.key = B_F|B_H|B_K              , .kana = "guxi"    }, // ぐぃ
   {.key = B_F|B_H|B_O              , .kana = "guxe"    }, // ぐぇ
   {.key = B_F|B_H|B_N              , .kana = "guxo"    }, // ぐぉ
-  {.key = B_F|B_H|B_L              , .kana = "guxwa"   }, // ぐゎ
+  {.key = B_F|B_H|B_DOT            , .kana = "guxwa"   }, // ぐゎ
   {.key = B_V|B_SCLN|B_J           , .kana = "tsa"     }, // つぁ
   {.key = B_V|B_SCLN|B_K           , .kana = "tsi"     }, // つぃ
   {.key = B_V|B_SCLN|B_O           , .kana = "tse"     }, // つぇ

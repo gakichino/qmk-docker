@@ -5,11 +5,11 @@ services:
       dockerfile: Dockerfile
     container_name: qmk-firmware
     volumes:
-      # キーボードのリポジトリをマウント
-      - ./custom_keyboard:/custom_keyboard
       # ビルド済みファームウェアの出力先
       - ./firmware:/firmware
       - ./qmk_firmware:/qmk_firmware
+      # キーボードのリポジトリをマウント
+      - ./aki27/cocot46plus:/qmk_firmware/keyboards/aki27/cocot46plus
     stdin_open: true
     tty: true
     # command: /bin/bash -c "./setup.sh; tail -f /dev/null"
