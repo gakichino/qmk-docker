@@ -29,20 +29,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define POINTING_DEVICE_ROTATION_180
 #define OLED_FONT_H "keyboards/aki27/cocot46plus/glcdfont.c"
-
-#define NAGINATA_TATEGAKI
-// #define NAGINATA_YOKOGAKI
-
-// #define NAGINATA_EDIT_WIN // JP106
-// #define UNICODE_SELECTED_MODES UC_WINC
-
-#define NAGINATA_EDIT_MAC // US101
-// Macはunicode入力を使わない
-#define MAC_LIVE_CONVERSION // Macでライブ変換をオンにしている場合
-
-// #define NAGINATA_EDIT_LINUX
-// #define UNICODE_SELECTED_MODES UC_LNX
-
-// 初回起動時後置シフトをデフォルト有効にする
-// 初回起動以降切り替える場合は、NG_KOTIを押して切り替える
-#define NAGINATA_KOUCHI_SHIFT // シフトを後置でも有効にする
