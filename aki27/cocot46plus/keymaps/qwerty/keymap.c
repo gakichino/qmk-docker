@@ -18,34 +18,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #include "quantum.h"
-#include "naginata.h"
-NGKEYS naginata_keys;
 
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_number {
     _MAC = 0,
     _WIN = 1,
-    _NAGINATA = 2,
+    _Layer2 = 2,
     _NUMBERS = 3,
     _Layer4 = 4,
     _MACSC = 5,
     _WINSC = 6,
 };
-
-enum custom_keycodes {
-    EISU = NG_SAFE_RANGE,
-    KANA2,
-    LCTLTOG, // Macのライブ変換をオン/オフする
-};
-
-void matrix_init_user(void) {
-    // 薙刀式
-    uint16_t ngonkeys[] = {KC_N, KC_M};   // 薙刀オン（N+M）
-    uint16_t ngoffkeys[] = {KC_V, KC_B};  // 薙刀オフ（V+B）
-    set_naginata(_NAGINATA, ngonkeys, ngoffkeys);
-    // 薙刀式
-}
 
 
 #define LW_MHEN LT(1,KC_INT5)  // lower
@@ -87,16 +71,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                  KC_PGUP, DF(0),    KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
     ),
-  [_NAGINATA] = LAYOUT(
+  [_Layer2] = LAYOUT(
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      LGUI_T(KC_TAB),    NG_Q,    NG_W,    NG_E,    NG_R,    NG_T,                                          NG_Y,    NG_U,    NG_I,    NG_O,   NG_P,  KC_TRNS,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_TRNS, NG_A,    NG_S,    NG_D,    NG_F,    NG_G,                                          NG_H,    NG_J,    NG_K,    NG_L, NG_SCLN, KC_TRNS,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-      KC_TRNS,    NG_Z,    NG_X,    NG_C,    NG_V,    NG_B,                                          NG_N,    NG_M, NG_COMM,  NG_DOT, NG_SLSH, EISU,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
-                        NG_KOTI, MO(3),   NG_SHFT,  KC_TRNS, MS_BTN1,             MS_BTN2,  KC_TRNS, NG_SHFT2, KC_RGUI,  LCTL(KC_DOWN),
-                                                                 LCTL(KC_MINS), KC_TRNS,    LCTL(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
+                        XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,   XXXXXXX,             XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,
+                                                                 XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+                                                            //`--------------'  `--------------'
     ),
   [_NUMBERS] = LAYOUT( // numbers & symbols
   //|-------------------------------------------------------|                                   |-------------------------------------------------------|
@@ -155,38 +140,10 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_WIN]     = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_MACSC]     = { ENCODER_CCW_CW(LGUI(KC_MINS), LGUI(KC_EQL)) },
     [_WINSC] = { ENCODER_CCW_CW(LCTL(KC_MINS), LCTL(KC_EQL)) },
-    [_NAGINATA]  = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
+    [_Layer2]  = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_NUMBERS]    = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
 };
 #endif
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-      case EISU:
-        if (record->event.pressed) {
-          // 薙刀式
-          naginata_off();
-          // 薙刀式
-        }
-        return false;
-        break;
-      case KANA2:
-        if (record->event.pressed) {
-          // 薙刀式
-          naginata_on();
-          // 薙刀式
-        }
-        return false;
-        break;
-    }
-  
-    // 薙刀式
-    if (!process_naginata(keycode, record))
-        return false;
-    // 薙刀式
-  
-    return true;
-  }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
@@ -194,7 +151,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         rgblight_sethsv_range(0, 0, 0, 0, 2);
         cocot_set_scroll_mode(false);
         break;
-    case _NAGINATA:
+    case _Layer2:
         rgblight_sethsv_range(HSV_YELLOW, 0, 2);
         cocot_set_scroll_mode(false);
         break;
