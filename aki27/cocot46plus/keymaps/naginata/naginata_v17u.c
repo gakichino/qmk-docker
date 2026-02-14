@@ -222,20 +222,20 @@ const PROGMEM naginata_keymap ngmap[] = {
   {.key = B_J|B_B                  , .kana = "zo"      }, // ぞ
   {.key = B_F|B_N                  , .kana = "da"      }, // だ
   {.key = B_J|B_G                  , .kana = "di"      }, // ぢ
-  {.key = B_F|B_SCLN               , .kana = "du"      }, // づ
+  {.key = B_F|B_L                  , .kana = "du"      }, // づ
   {.key = B_J|B_E                  , .kana = "de"      }, // で
   {.key = B_J|B_D                  , .kana = "do"      }, // ど
   {.key = B_J|B_C                  , .kana = "ba"      }, // ば
   {.key = B_J|B_X                  , .kana = "bi"      }, // び
-  {.key = B_F|B_DOT                , .kana = "bu"      }, // ぶ
+  {.key = B_F|B_SCLN               , .kana = "bu"      }, // ぶ
   {.key = B_F|B_P                  , .kana = "be"      }, // べ
   {.key = B_J|B_Z                  , .kana = "bo"      }, // ぼ
-  {.key = B_F|B_L                  , .kana = "vu"      }, // ゔ
+  {.key = B_F|B_L|B_SCLN           , .kana = "vu"      }, // ゔ
 
   // 半濁音
   {.key = B_M|B_C                  , .kana = "pa"      }, // ぱ
   {.key = B_M|B_X                  , .kana = "pi"      }, // ぴ
-  {.key = B_V|B_DOT                , .kana = "pu"      }, // ぷ
+  {.key = B_V|B_SCLN               , .kana = "pu"      }, // ぷ
   {.key = B_V|B_P                  , .kana = "pe"      }, // ぺ
   {.key = B_M|B_Z                  , .kana = "po"      }, // ぽ
 
