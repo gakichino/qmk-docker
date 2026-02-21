@@ -343,8 +343,9 @@ const PROGMEM naginata_keymap ngmap[] = {
   // 追加
   {.key = B_SHFT            , .kana = " "},
   {.key = B_Q               , .kana = ""},
+  {.key = B_T               , .kana = ","},
   {.key = B_V|B_SHFT        , .kana = ","},
-  {.key = B_J|B_K|B_F        , .kana = ";"},
+  {.key = B_J|B_K|B_F       , .kana = ";"},
   {.key = B_J|B_K|B_G       , .kana = ":"},
   {.key = B_J|B_K|B_G       , .kana = ":"},
   {.key = B_J|B_K|B_V       , .kana = "<"},
@@ -352,6 +353,7 @@ const PROGMEM naginata_keymap ngmap[] = {
   {.key = B_J|B_K|B_D       , .kana = "?"},
   {.key = B_J|B_K|B_C       , .kana = "!"},
   
+  {.key = B_Y               , .kana = "."},
   {.key = B_M|B_SHFT        , .kana = "."SS_TAP(X_ENTER)},
   // {.key = B_U               , .kana = SS_TAP(X_BSPC)},
 
