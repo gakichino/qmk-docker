@@ -1,0 +1,15 @@
+# VIA無効化でフラッシュ約3KB削減（薙刀式で容量超過するため）
+VIA_ENABLE = no
+MOUSEKEY_ENABLE = yes
+RGBLIGHT_ENABLE = yes
+ENCODER_MAP_ENABLE = yes
+SRC += seoto.c
+# 編集モード
+# UNICODE_ENABLE = yes
+EXTRAFLAGS += -flto
+LTO_ENABLE = yes
+CONSOLE_ENABLE = no
+COMMAND_ENABLE = no
+# さらに容量が必要な場合は BOOTMAGIC_ENABLE = no や OLED_ENABLE = no を検討
+BOOTMAGIC_ENABLE = no
+OLED_ENABLE = yes
