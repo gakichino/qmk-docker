@@ -65,6 +65,7 @@ void pointing_device_init_kb(void) {
     // set the CPI.
     pointing_device_set_cpi(cpi_array[cocot_config.cpi_idx]);
     adns5050_write_reg(0x22, 0b10000 | 0x80);
+    pointing_device_init_user();
 }
 
 
@@ -285,6 +286,9 @@ void oled_write_layer_state(void) {
             break;
         case 6:
             oled_write_P(PSTR("WinSC"), false);
+            break;
+        case 7:
+            oled_write_P(PSTR("Mouse"), false);
             break;
         default:
             oled_write_P(PSTR("Undef"), false);

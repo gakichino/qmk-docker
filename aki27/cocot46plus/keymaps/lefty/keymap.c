@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include "quantum.h"
 
-// LalaPad Gen2 踏襲レイヤー
+// LalaPad Gen2 踏襲レイヤー + Auto Mouse
 enum layer_number {
     _MAC = 0,
     _WIN = 1,
@@ -28,6 +28,8 @@ enum layer_number {
     _FN = 4,
     _MACSYS = 5,
     _WINSYS = 6,
+    _MOUSE = 7,
+    _SCROLL = 8,
 };
 
 #define CTL_A    LCTL_T(KC_A)
@@ -46,20 +48,24 @@ enum layer_number {
 #define SFT_0    LSFT_T(KC_0)
 
 // ---------------------------------------------------------------------------
-// Combos (LalaPad + A+S スクロール)
+// Combos
+// E+R → SCROLL。Auto Mouse 中は同位置が MS_BTN3/2 になるため、両方を定義する。
 // ---------------------------------------------------------------------------
 enum combo_events {
-    AS_FN = 0,
+    ER_SCROLL = 0,
+    ER_SCROLL_AML,
     SPC_TAB_MAC,
     SPC_TAB_WIN,
 };
 
-const uint16_t PROGMEM as_combo[]    = {CTL_A, KC_S, COMBO_END};
-const uint16_t PROGMEM spc_tab_mac[] = {SYM_SPC, GUI_TAB, COMBO_END};
-const uint16_t PROGMEM spc_tab_win[] = {SYM_SPC, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM er_combo[]     = {KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM er_aml_combo[] = {MS_BTN3, MS_BTN2, COMBO_END};
+const uint16_t PROGMEM spc_tab_mac[]  = {SYM_SPC, GUI_TAB, COMBO_END};
+const uint16_t PROGMEM spc_tab_win[]  = {SYM_SPC, CTL_TAB, COMBO_END};
 
 combo_t key_combos[] = {
-    [AS_FN]       = COMBO(as_combo, MO(_FN)),
+    [ER_SCROLL]       = COMBO(er_combo, MO(_SCROLL)),
+    [ER_SCROLL_AML]   = COMBO(er_aml_combo, MO(_SCROLL)),
     [SPC_TAB_MAC] = COMBO(spc_tab_mac, MO(_MACSYS)),
     [SPC_TAB_WIN] = COMBO(spc_tab_win, MO(_WINSYS)),
 };
@@ -151,6 +157,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                      LGUI(KC_L), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,             KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,
                                                           LCTL(KC_MINS), MS_BTN3, LCTL(KC_EQL), XXXXXXX, XXXXXXX, XXXXXXX
                                                             //`--------------'  `--------------'
+    ),
+  // ベースの MS_BTN1/2 はそのまま。中クリック・進戻・ホールドスクロールのみ追加。
+  // その他は TRNS → 文字キー押下で Auto Mouse を解除して打鍵を通す。
+  [_MOUSE] = LAYOUT(
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      KC_TRNS, KC_TRNS, KC_TRNS, MS_BTN3, MS_BTN2, MS_BTN1,                                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+                        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MS_BTN2,             MS_BTN1, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,
+                                                                 KC_TRNS, KC_TRNS,    KC_TRNS, XXXXXXX, XXXXXXX, XXXXXXX
+                                                            //`--------------'  `--------------'
+    ),
+  [_SCROLL] = LAYOUT(
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      KC_TRNS, KC_TRNS, KC_TRNS, MS_BTN3, MS_BTN2, MS_BTN1,                                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  //|-------------------------------------------------------|                                   |-------------------------------------------------------|
+                        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MS_BTN2,             MS_BTN1, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,
+                                                                 KC_TRNS, KC_TRNS,    KC_TRNS, XXXXXXX, XXXXXXX, XXXXXXX
+                                                            //`--------------'  `--------------'
     )
 };
 
@@ -163,8 +195,24 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_FN]     = { ENCODER_CCW_CW(KC_PGUP, KC_PGDN) },
     [_MACSYS] = { ENCODER_CCW_CW(LGUI(KC_MINS), LGUI(KC_EQL)) },
     [_WINSYS] = { ENCODER_CCW_CW(LCTL(KC_MINS), LCTL(KC_EQL)) },
+    [_MOUSE]  = { ENCODER_CCW_CW(MS_WHLD, MS_WHLU) },
+    [_SCROLL] = { ENCODER_CCW_CW(MS_WHLD, MS_WHLU) },
 };
 #endif
+
+void pointing_device_init_user(void) {
+    set_auto_mouse_enable(true);
+}
+
+// SCRL_MO はマウス操作の一部として扱い、押している間は Auto Mouse を維持する
+bool is_mouse_record_user(uint16_t keycode, keyrecord_t* record) {
+    switch (keycode) {
+    case SCRL_MO:
+        return true;
+    default:
+        return false;
+    }
+}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
@@ -190,6 +238,14 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         break;
     case _WINSYS:
         rgblight_sethsv_range(HSV_ORANGE, 0, 2);
+        cocot_set_scroll_mode(true);
+        break;
+    case _MOUSE:
+        rgblight_sethsv_range(HSV_BLUE, 0, 2);
+        cocot_set_scroll_mode(false);
+        break;
+    case _SCROLL:
+        rgblight_sethsv_range(HSV_GREEN, 0, 2);
         cocot_set_scroll_mode(true);
         break;
     default:
